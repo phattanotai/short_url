@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+  # server:
+  #   build:
+  #     context: ./server
+  #   container_name: server
+  #   volumes:
+  #     - ./logs:/home/node/app/logs
+  #     - ./client/build:/home/node/client/build
+  #   environment:
+  #     - DATABASE_URL=${DATABASE_URL}
+  #     - DATABASE_TYPE=${DATABASE_TYPE}
+  #     - JWT_SECRET=${JWT_SECRET}
+  #     - IPREGISTRY_API_KEY=${IPREGISTRY_API_KEY}
+  #   depends_on:
+  #     - db
+  #   ports:
+  #     - ${PORT}:4000
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ./client
+  #   ports:
+  #     - 80:80
+  #   environment:
+  #     - BACKEND_URL=http://server:${PORT}
+  #     - REACT_APP_BACKEND_ENDPOINT=http://server:${PORT}
+  server:
+    build:
+      context: ./
+    container_name: server
+    volumes:
+      - ./logs:/home/node/app/logs
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_TYPE=${DATABASE_TYPE}
+      - JWT_SECRET=${JWT_SECRET}
+      - IPREGISTRY_API_KEY=${IPREGISTRY_API_KEY}
+      - REACT_APP_BACKEND_ENDPOINT=http://server:${PORT}
+    depends_on:
+      - db
+    ports:
+      - ${PORT}:4000
+  db:
+    container_name: db
+    image: mysql:5.7
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./init.sql:/data/application/init.sql
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}

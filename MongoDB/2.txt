@@ -1,0 +1,322 @@
+1 แสดงรายชื่อของประธานาธิบดีและคู่สมรสที่แต่งงานกันเมื่อทั้งคู่อายุเท่ากันเรียงลำดับตามปีที่สมรสล่าสุด
+db.getCollection("pres_marriage").aggregate([
+    {
+        $match: {
+             $expr: {
+                 $eq:["$pr_age", "$sp_age"]
+             }
+            
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+            pres_name: 1,
+            spouse_name: 1,
+            mar_year: 1
+        }
+    },
+    {
+        $sort: {
+            mar_year: -1
+        }
+    }
+])
+
+
+2 แสดงจำนวนบุตรของประธานาธิบดีที่มีอายุน้อยกว่าภรรยาไม่เกิน 2 ปี
+
+db.getCollection("pres_marriage").aggregate([
+    {
+        $project: {
+            _id: 0,
+           nr_children: 1,
+           age: { 
+               $subtract : [ "$sp_age" ,"$pr_age"] 
+           }
+        }
+    },
+    {
+        $match: {
+             $and: [
+               { "age": { $gte: 1}},
+               {"age": { $lte: 2}}
+              ]
+        }
+    }    
+])
+
+3 แสดงสมัยการปกครองและจำนวนของรองประธานาธิบดี ของสมัยการปกคอรงที่มีรองประธานาธิบดีมากกว่า 1 คน
+db.getCollection("admin_pr_vp").aggregate([
+
+              {
+                $group: {
+                  _id : "$admin_nr",
+                  total: { $sum:  1}   
+                }
+              },
+              {
+                  $match: {
+                     total: { $gt: 1 }
+                  }
+              },
+              {
+                 $project: {
+                   _id: 0,
+                   admin_nr: "$_id",
+                   total: 1
+                 }
+              }
+])
+
+4 แสดงรายชื่อประธานาธิบดี ปีที่ดำรงตำแหน่ง ที่เคยแพ้ในการเลือกตั้ง
+db.getCollection("administration").aggregate([
+    {
+        $lookup: {
+               from: "election",
+               let: {  pres_name: "$pres_name",l: "L"},
+               pipeline: [
+                  { $match:
+                     { $expr:
+                        { $and:
+                           [
+                             { $eq: [ "$candidate",  "$$pres_name" ] },
+                             { $eq: [ "$winner_loser_indic",  "$$l" ] },
+                           ]
+                        }
+                     }
+                  },
+                 { 
+                     $project: {
+                           _id: 0,
+                           winner_loser_indic: 1
+                     }
+                 }
+               ],
+               as: "election"
+         },
+     },
+     { 
+          $unwind : { 
+                "path" : "$election", 
+                "preserveNullAndEmptyArrays" : true
+          }
+     },
+     {
+       $match: {
+          "election": { $exists: true }
+       }
+     },
+     {
+         $group: {
+             _id: "$pres_name",
+             year_inaugurated: {
+                 $first: "$year_inaugurated"
+             }
+         }
+     },
+          {
+         $project: {
+           _id: 0,
+           pres_name: "$_id",
+           year_inaugurated: 1,
+         }
+     },
+     {
+         $sort: {
+           year_inaugurated: 1
+         }
+     }
+])
+
+5 แสดงอายุเมื่อถึงอสัญกรรมโดยเฉลี่ยของประธานาธิบดีในแต่ละพรรค โดยไม่ต้องแสดงพรรค Whig และ Demo-Rep
+db.getCollection("president").aggregate([
+    {
+        $match: {
+            party: {
+                $nin: ["Whig","Demo-Rep" ]
+            }
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+            death_age: 1,
+            party: 1,
+        }
+    },
+    {
+        $group: {
+            _id: "$party",
+            age: {
+                $avg: "$death_age"
+            }
+            
+        }
+    }
+])
+
+6 แสดงรายละเอียดการแต่งงานของประธานาธิบดีครั้งใดที่มีบุตรมากกว่าเท่ากัน 2 คน และภรรยาที่มีอักษร L ในชื่อ
+db.getCollection("pres_marriage").aggregate([
+    {
+        $match: {
+             $and: [
+                 {
+                    "nr_children": { $gte: 2 }
+                 },
+                {
+                    "spouse_name" : { $regex: /^.*l.*$/i }             
+                }
+             ]
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+           "pres_name" : 1, 
+            "spouse_name" : 1 ,
+            "pr_age" : 1, 
+            "sp_age" : 1, 
+            "nr_children" : 1, 
+            "mar_year" : 1
+        }
+    }
+    
+])
+
+7 แสดงจำนวนมีประธานาธิบดีกี่คนที่ยังมีชีวิตอยู่ในปี 1970
+db.getCollection("president").aggregate([
+  {
+   $project: {
+       total: { $add: ["$birth_yr", "$death_age"] }
+   }
+  },
+    {
+        $match: {
+            "total": { $gt:  1970}
+        }
+    },
+
+])
+
+
+8 แสดงรายชื่อประธานาธิบดีคนใดที่ไม่เคยแต่งงานและแสดงคอลัมน์สถานะการแต่งงานเท่ากับ NO
+db.getCollection("president").aggregate([
+{
+          $lookup: {
+               from: "pres_marriage",
+               let: {  pres_name: "$pres_name" },
+               pipeline: [
+                  { $match:
+                     { $expr:
+                        { $and:
+                           [
+                             { $eq: [ "$pres_name",  "$$pres_name" ] },
+                           ]
+                        }
+                     }
+                  },
+                  
+               ],
+               as: "marriage"
+         }
+  },
+  { 
+           $unwind : { 
+                "path" : "$marriage", 
+                "preserveNullAndEmptyArrays" : true
+             }
+   },
+   {
+       $match: {
+           marriage: { $exists: false }
+       }
+   },
+    {
+        $project: {
+            _id: 0,
+            pres_name: 1,
+            marriage: {$ifNull:["$marriage","NO"]}
+        }
+    }
+])
+
+9 แสดงรายชื่อของประธานาธิบดีและปีที่ได้เป็นประธานาธิบดีเป็นครั้งแรก และเรียงลำดับตามชื่อประธานาธิบดี
+db.getCollection("administration").aggregate([
+    {
+        $group: {
+            _id: "$pres_name",
+            year: {
+                $min: "$year_inaugurated"
+            }
+        }
+    },
+    {
+     $project: {
+         _id: 0,
+         "name": "$_id",
+          year: 1
+     }
+    },
+    {
+        $sort: {
+          "name": 1
+        }
+    }
+
+])
+
+10 แสดงรายชื่อประธานาธิบดี ปีที่ดำรงตำแหน่งปีแรกและจำนวนครั้งที่เคยแพ้ทั้งหมดในการเลือกตั้ง
+db.getCollection("administration").aggregate([
+  
+    {
+        $group: {
+            _id: "$pres_name",
+            year: {
+                $min: "$year_inaugurated"
+            }
+        }
+    },
+    {
+        $lookup: {
+               from: "election",
+               let: {  pres_name: "$_id",l: "L" },
+               pipeline: [
+                  { $match:
+                     { $expr:
+                        { $and:
+                           [
+                             { $eq: [ "$candidate",  "$$pres_name" ] },
+                              { $eq: [ "$winner_loser_indic",  "$$l" ] },
+                           ]
+                        }
+                     }
+                  },
+                  {
+                    $group: {
+                        _id: "$winner_loser_indic",
+                        total: { $sum: 1 }  
+                    }
+                },
+                  
+               ],
+               as: "election"
+         },
+    },
+     { 
+          $unwind : { 
+                "path" : "$election", 
+                "preserveNullAndEmptyArrays" : true
+          }
+     },
+     {   $project: {
+             _id: 0,
+             name: "$_id",
+             year: 1,
+             election: {$ifNull:["$election","NO"]}
+         }
+        
+     }
+
+])
+
