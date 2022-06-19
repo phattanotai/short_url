@@ -3,10 +3,9 @@ import axios from "axios";
 
 const createPckd = async (data) => {
   try {
-console.log(`${getBackendURL()}/createPckd`)
     const res = await axios({
       method: "post",
-      url: `${getBackendURL()}/createPckd`,
+      url: `${getBackendURL()}/api/pckd/createPckd`,
       data: data,
     });
 
@@ -20,7 +19,7 @@ const getTarget = async (pckd) => {
   try {
     const res = await axios({
       method: "post",
-      url: `${getBackendURL()}/getTarget`,
+      url: `${getBackendURL()}/api/pckd/getTarget`,
       data: {
         pckd,
       },

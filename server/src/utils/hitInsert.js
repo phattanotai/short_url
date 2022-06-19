@@ -11,13 +11,13 @@ module.exports = async ({ ip, userAgent, pckdId, prisma }) => {
     } = parsedUserAgent;
 
     // If isp exists, get details from api
-    let ipInfo;
+    let ipInfo = {};
     // 3.1.1 Get isp info
     try {
       // const ispInfo = await isp(ip);
       if (ip) {
         const rawIspInfo = await isp(ip);
-
+        console.log(rawIspInfo);
         ipInfo = {
           ip: ip,
           type: rawIspInfo.type,
@@ -34,7 +34,7 @@ module.exports = async ({ ip, userAgent, pckdId, prisma }) => {
           locationContinentName: rawIspInfo.location.continent.name,
           locationContinentCode: rawIspInfo.location.continent.code,
         };
-      } else ipInfo = {};
+      }
     } catch (error) {
       console.error("IP address error: ", error);
     }

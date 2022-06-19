@@ -1,8 +1,0 @@
-type Mutation {
-  createPckd(
-    pckd: String
-    title: String
-    target: String!
-    enableTracking: Boolean
-  ): String!
-}

@@ -1,24 +1,17 @@
-const { createRandomPckd } = require("../../../helpers");
-const { isDuplicatePckd } = require("../../../helpers");
-
+const { isDuplicatePckd, createRandomPckd } = require("../helpers");
+const { getUserId } = require("../utils/auth");
 module.exports = {
-  Mutation: {
-    createPckd: async (_, args, ctx) => {
-      // Extract db from context
-      const { prisma } = ctx;
-
+  generrateUrl: async (req, res, prisma) => {
+    try {
+      const args = req.body;
       // Get args
       const { title, target, enableTracking } = args;
-
-      // Get user Id
-      const userId = ctx.getUserId(ctx, (throwErrors = false));
-
-      // 1. Get Pckd String
+      const userId = getUserId(req);
+      // // 1. Get Pckd String
       let pckd;
-      // check if pckd is passed in, else throw error
+      // // check if pckd is passed in, else throw error
       if (args.hasOwnProperty("pckd") && args.pckd) {
         pckd = args.pckd;
-
         // check if pckd is valid
         if (await isDuplicatePckd(prisma, pckd)) {
           throw new Error(
@@ -34,8 +27,8 @@ module.exports = {
         pckd,
         target,
         userId,
-        title: userId ? title : null,
-        enableTracking: userId ? enableTracking : false,
+        title: title,
+        enableTracking: enableTracking,
       };
 
       // 3. Create Pckd
@@ -43,7 +36,17 @@ module.exports = {
         data,
       });
 
-      return pckd;
-    },
+      res.json({ createPckd: pckd });
+    } catch (e) {
+      console.error(e);
+    }
+  },
+  getTargetUrl: async (req, res, prisma) => {
+    try {
+      const data = req.bpby;
+      res.json({ data });
+    } catch (e) {
+      console.error(e);
+    }
   },
 };
