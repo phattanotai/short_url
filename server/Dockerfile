@@ -1,5 +1,9 @@
 FROM node
 
+ENV REACT_APP_BACKEND_ENDPOINT="https://short-url.gracia.tech"
+ENV NODE_ENV production
+ENV PORT 4000
+
 # Dependencies
 #RUN apk add --no-cache dos2unix
 RUN npm install -g nodemon prisma
@@ -28,8 +32,6 @@ RUN chown -R node:node .
 USER node
 
 # Environment
-ENV NODE_ENV production
-ENV PORT 4000
-EXPOSE 4000
 
+EXPOSE ${PORT}
 ENTRYPOINT ["/bin/sh", "/entrypoint.sh"]

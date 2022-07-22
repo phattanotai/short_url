@@ -20,7 +20,7 @@ export const getDomainFromURI = (uri) =>
   uri.replace(/(^\w+:|^)\/\//, "").split("/")[0];
 
 export const getBackendURL = () => {
-console.log(process.env)
+  console.log(process.env);
   const uri = process.env.REACT_APP_BACKEND_ENDPOINT;
   // return URI, and relplace /undefined/ with /
   return uri.replace(/undefined/g, "/");

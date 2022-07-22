@@ -1,0 +1,14 @@
+FROM node as builder
+
+WORKDIR /home/node
+
+# Install development dependencies
+COPY package.json .
+#COPY package-lock.json .
+
+RUN yarn install
+
+# Build react application
+COPY . .
+EXPOSE 4000
+CMD ["npm", "start"]

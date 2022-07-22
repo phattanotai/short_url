@@ -1,6 +1,6 @@
 # Cache files
 .DS_Store
 .env
-mysql_data/*
+mysql_data
 logs
 server/prisma/migrations

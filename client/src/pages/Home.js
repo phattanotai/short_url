@@ -24,7 +24,7 @@ const FooterWrapper = styled.footer`
 const Home = () => {
   return (
     <Wrapper>
-      {/* <NewNav /> */}
+      <NewNav />
       <ContentWrapper>
         <CreatePckd />
       </ContentWrapper>

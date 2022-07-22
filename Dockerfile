@@ -30,10 +30,6 @@ RUN npm install
 # Copy the rest of the app
 COPY ./server/. .
 
-# Start script
-COPY --chown=node:node ./docker-start.sh /entrypoint.sh
-#RUN chmod +x /entrypoint.sh
-
 # Generate prisma
 RUN prisma generate
 
