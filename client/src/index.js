@@ -11,7 +11,7 @@ import store from "./app/store";
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider>
-      <BrowserRouter basename="/manage">
+      <BrowserRouter>
         <App />
         {/* Notifications - Toast Provider */}
         <Toaster

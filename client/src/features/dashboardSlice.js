@@ -1,24 +1,29 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
+import { getAllPckd, getPckdInfo, getHitById } from "../services/pckd.service";
 
 export const getUserPckds = createAsyncThunk(
   "dashboard/getUserPckds",
   async (props) => {
-    return {};
+    const data = await getAllPckd();
+    return data;
   }
 );
 
 export const selectPckd = createAsyncThunk(
   "dashboard/selectPckd",
   async (id) => {
-    return {};
+    const data = await getPckdInfo(id);
+    return data;
   }
 );
 
 export const selectHit = createAsyncThunk("dashboard/selectHit", async (id) => {
   // If no id is provided, return
   if (!id) return null;
-  return {};
+
+  const data = await getHitById(id);
+  return data;
 });
 
 export const dashboardSlice = createSlice({

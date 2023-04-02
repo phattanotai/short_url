@@ -20,15 +20,19 @@ export const getDomainFromURI = (uri) =>
   uri.replace(/(^\w+:|^)\/\//, "").split("/")[0];
 
 export const getBackendURL = () => {
-  console.log(process.env);
   const uri = process.env.REACT_APP_BACKEND_ENDPOINT;
   // return URI, and relplace /undefined/ with /
   return uri.replace(/undefined/g, "/");
 };
 
 export const getHumanDateFromEpoch = (epoch) => {
+  let date = epoch;
+
+  if (typeof epoch !== "number") {
+    date = new Date(epoch).getTime();
+  }
   return (
-    new Date(Number(epoch)).toLocaleDateString("en-GB", {
+    new Date(Number(date)).toLocaleDateString("en-GB", {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -36,8 +40,13 @@ export const getHumanDateFromEpoch = (epoch) => {
   );
 };
 export const getHumanTimeFromEpoch = (epoch) => {
+  let date = epoch;
+
+  if (typeof epoch !== "number") {
+    date = new Date(epoch).getTime();
+  }
   return (
-    new Date(Number(epoch)).toLocaleTimeString("en-GB", {
+    new Date(Number(date)).toLocaleTimeString("en-GB", {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
