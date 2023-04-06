@@ -21,6 +21,11 @@ async function bootstrap() {
     express.static(join(__dirname, '..', './../client/build')),
   );
 
+  app.use(
+    '/manage/*',
+    express.static(join(__dirname, '..', './../client/build')),
+  );
+
   app.use(cookieParser());
   app.setGlobalPrefix('api');
 

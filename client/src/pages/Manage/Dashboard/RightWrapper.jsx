@@ -23,13 +23,13 @@ import { ReactComponent as Device } from "../../../assets/icons/device.svg";
 import NoHit404Img from "../../../assets/images/404-hit.png";
 
 const RightWrapperStyles = styled.div`
-  height: 100%;
-  max-height: 95vh;
-  padding: 14px 30px 0 0;
+  height: 985;
+  max-height: 90%;
+  padding: 14px 0 0 20px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  max-width: 350px;
+  max-width: 450px;
 
   & .flex-height {
     display: grid;

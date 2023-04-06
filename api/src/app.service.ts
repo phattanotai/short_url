@@ -40,6 +40,7 @@ export class AppService {
 
   async handleHitInsert(pckd: TbUrl, ip: string, request: Request) {
     const userAgent = request.headers['user-agent'];
+
     const parsedUserAgent = parser(userAgent);
 
     const {
@@ -76,7 +77,7 @@ export class AppService {
       ip: ip,
       pckd: pckd,
       ...ipInfo,
-      browserName: browserName,
+      browserName: browserName || parsedUserAgent.ua,
       browserVersion: browserVersion,
       OSName: OSName,
       OSVersion: OSVersion,

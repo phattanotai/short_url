@@ -37,7 +37,7 @@ export class UserController {
   }
 
   @Post()
-  create(@Res() response, @Body() createdUserDto: CreateUser) {
+  async create(@Res() response, @Body() createdUserDto: CreateUser) {
     try {
       return this.userService
         .create(createdUserDto)
@@ -99,7 +99,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Res() response: Response) {
+  async findAll(@Res() response: Response) {
     try {
       return this.userService.findAll().then((users) => {
         if (users.length) {
@@ -123,7 +123,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  find(@Res() response: Response, @Param('id') id: number) {
+  async find(@Res() response: Response, @Param('id') id: number) {
     try {
       return this.userService.findOne(id).then((user) => {
         if (user) {

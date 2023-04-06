@@ -13,13 +13,14 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 600px;
   /* height: 100%; */
   overflow: hidden;
   background-color: #f3f8fe;
 `;
 
 const DashboardWrapper = styled.div`
-  padding: 26px 42px 0;
+  padding: 20px 30px 0;
   height: 100%;
   display: grid;
   /* align-items: center; */

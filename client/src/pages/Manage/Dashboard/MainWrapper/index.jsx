@@ -8,11 +8,11 @@ import Graphs from "./Graphs";
 import NewUserWelcomeImg from "../../../../assets/images/new-user-welcome.png";
 
 const MainWrapperStyles = styled.div`
-  height: 100%;
+  height: 85%;
   max-height: 95vh;
   padding-bottom: 20px;
   overflow-y: scroll;
-  padding: 14px 20px 0 20px;
+  padding: 14px 10px 0 10px;
   flex-grow: 1;
 
   & .main-btn {

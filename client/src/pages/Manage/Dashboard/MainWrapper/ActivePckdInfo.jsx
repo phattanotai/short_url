@@ -16,6 +16,8 @@ import { ReactComponent as Calendar } from "../../../../assets/icons/calendar.sv
 import { useState } from "react";
 
 const DetailsWrapper = styled.div`
+  position: relative;
+
   & p {
     margin: 0;
     font-weight: 500;

@@ -16,7 +16,7 @@ export class AppController {
     @RealIP() ip: string,
   ) {
     try {
-      if (ip === '::1') ip = '74.125.24.100';
+      if (ip === '::1') ip = '52.220.107.161'; // '74.125.24.100';
       const data = await this.appService.handleAll(id);
 
       if (!data || !data.target) {

@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 import { Role } from '../enum/role.enum';
 import { LoginUser } from './LoginUser.dto';
 
@@ -12,13 +18,14 @@ export class CreateUser extends LoginUser {
 
   @IsString()
   @IsNotEmpty()
-  @Length(0, 10)
+  @Length(0, 50)
   username: string;
 
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
+  @IsOptional()
   @IsString()
-  role: Role;
+  role?: Role;
 }

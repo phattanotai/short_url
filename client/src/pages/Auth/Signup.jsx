@@ -47,7 +47,7 @@ const Signup = () => {
         <div className="logo">
           <img src={LogoWhite} alt="Logo" />
         </div>
-        <h1 className="title">Register for Pckd!</h1>
+        <h1 className="title">Register for Short URL!</h1>
       </div>
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>

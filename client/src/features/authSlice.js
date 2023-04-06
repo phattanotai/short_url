@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
-import { login, initUser } from "../services/auth.service";
+import { login, initUser, register } from "../services/auth.service";
 // User State structure
 const userInitialState = {
   userInfo: {
@@ -25,7 +25,15 @@ export const loginUser = createAsyncThunk(
 export const signupUser = createAsyncThunk(
   "users/signupUser",
   async ({ email, password, name }) => {
-    return {};
+    const signupUser = {
+      username: email,
+      email,
+      password,
+      name,
+    };
+    await register(signupUser);
+    const data = await login({ username: email, password });
+    return data.jwt;
   }
 );
 

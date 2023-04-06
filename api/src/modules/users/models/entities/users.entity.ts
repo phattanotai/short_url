@@ -25,10 +25,10 @@ export class TbUsers {
   img: string;
 
   @Column({ type: 'timestamp', default: () => 'now()' })
-  createAt: Date;
+  createdAt: Date;
 
   @Column({ type: 'timestamp', default: () => 'now()' })
-  updateAt: Date;
+  updatedAt: Date;
 
   @BeforeInsert()
   emailToLowerCase() {

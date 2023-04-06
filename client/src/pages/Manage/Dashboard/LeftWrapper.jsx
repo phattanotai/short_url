@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserPckds, selectPckd } from "../../../features/dashboardSlice";
 
 const LeftWrapperStyles = styled.div`
-  height: 100%;
+  height: 85%;
   padding: 14px 30px 20px 0;
   max-width: 450px;
 
@@ -83,14 +83,12 @@ const LeftWrapper = () => {
 
   useEffect(() => {
     dispatch(getUserPckds({ refetch: true }));
-    console.log(1);
   }, [dispatch]);
 
   useEffect(() => {
     if (rawUserPckds.length !== 0) {
       dispatch(selectPckd(rawUserPckds[0]?.id));
     }
-    console.log(2);
   }, [dispatch, rawUserPckds]);
 
   useEffect(() => {
@@ -150,7 +148,6 @@ const LeftWrapper = () => {
     };
 
     setUserPckds(formatForLeftBar(rawUserPckds));
-    console.log(3);
   }, [dispatch, rawUserPckds]);
 
   const select = (id) => {

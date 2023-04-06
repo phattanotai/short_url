@@ -91,6 +91,7 @@ const ProfileIcon = styled.div`
 
 const Profile = () => {
   const userInfo = useSelector((state) => state.auth.userInfo);
+  console.log(userInfo);
   const dispatch = useDispatch();
 
   const handleLogout = () => {

@@ -12,7 +12,7 @@ import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 import Forgot from "./pages/Auth/Forgot";
 import Profile from "./pages/Manage/Profile/.";
-
+import Users from "./pages/Manage/Users";
 import RedirectHandler from "./pages/RedirectHandler";
 
 const Router = () => {
@@ -31,6 +31,19 @@ const Router = () => {
               {/* Protected Routes */}
               <Route path="" element={<Dashboard />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="users" element={<Profile />} />
+            </>
+          ) : (
+            <>
+              <Route path="*" element={<Navigate to="/auth" replace />} />
+            </>
+          )}
+        </Route>
+
+        <Route path="users">
+          {isLoggedIn ? (
+            <>
+              <Route path="" element={<Users />} />
             </>
           ) : (
             <>

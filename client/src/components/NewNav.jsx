@@ -122,18 +122,25 @@ const ButtonLink = styled(Link)`
 
 const NewNav = ({ overDark = true, transperant = false }) => {
   const isLoggedIn = useSelector((state) => state.auth.loggedIn);
+  const userInfo = useSelector((state) => state.auth.userInfo);
   // Add menu state for mobile
 
   return (
     <NavWrapper transperant={transperant} overDark>
       <Link className="logo-container" to="/">
         {overDark ? <LogoWhite /> : <LogoColor />}
-        <span>Pckd</span>
+        <span>Short URL</span>
       </Link>
       <div className="right-container">
         <nav>
+          {userInfo.role === "admin" ? (
+            <NavLink activeClassName="active" to="/users">
+              Users
+            </NavLink>
+          ) : null}
+
           <NavLink activeClassName="active" to="/">
-            Create Pckd
+            Create URL
           </NavLink>
           <NavLink activeClassName="active" to="/dash">
             Dashboard

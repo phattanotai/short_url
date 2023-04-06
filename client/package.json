@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "manage",
   "dependencies": {
-    "@apollo/client": "^3.5.9",
+  
     "@reduxjs/toolkit": "^1.8.0",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",
